@@ -1,251 +1,376 @@
-# Generate a tailored catering website (Thai) with an olive-green elegant theme. 
-# Package into a ZIP for download. 
- 
-import os, zipfile, textwrap, json 
- 
-project_dir = "/mnt/data/catering_th_olive" 
-assets_dir = os.path.join(project_dir, "assets") 
-os.makedirs(assets_dir, exist_ok=True) 
- 
-index_html = """<!doctype html> 
-<html lang="th"> 
-<head> 
-  <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> 
-  <title>แคทเทอริ่งจัดเลี้ยงนอกสถานที่ — Olive Catering</title> 
-  <meta name="description" content="บริการแคทเทอริ่ง จัดเลี้ยงนอกสถานที่ เมนูคุณภาพ วัตถุดิบคัดสรร จัดเซ็ตหรู ดูดี เหมาะสำหรับงานแต่ง งานประชุม งานอีเวนต์ และงานสำคัญของคุณ"> 
-  <meta name="theme-color" content="#505a38"> 
-  <meta name="color-scheme" content="light dark"> 
-  <link rel="icon" href="assets/favicon.svg"> 
-  <link rel="preload" href="styles.css" as="style"> 
-  <link rel="stylesheet" href="styles.css"> 
-  <script defer src="script.js"></script> 
-  <script type="application/ld+json"> 
-  { 
-    "@context": "https://schema.org", 
-    "@type": "FoodEstablishment", 
-    "@id": "https://example.com/#catering", 
-    "name": "Olive Catering", 
-    "servesCuisine": ["Thai", "International", "Fusion"], 
-    "priceRange": "$$", 
-    "telephone": "+66-80-000-0000", 
-    "email": "contact@olivecatering.example", 
-    "url": "https://example.com", 
-    "image": "https://example.com/og.jpg", 
-    "address": { 
-      "@type": "PostalAddress", 
-      "addressCountry": "TH" 
-    }, 
-    "areaServed": "Bangkok and nearby provinces", 
-    "sameAs": ["https://www.facebook.com/","https://www.instagram.com/"] 
-  } 
-  </script> 
-</head> 
-<body> 
-  <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a> 
-  <header class="site-header" id="top"> 
-    <nav class="nav container" aria-label="เมนูหลัก"> 
-      <a class="brand" href="#top" aria-label="หน้าแรก"> 
-        <img src="assets/logo.svg" alt="Olive Catering โลโก้" width="28" height="28"> 
-        <span>Olive Catering</span> 
-      </a> 
-      <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="เปิดเมนู">เมนู</button> 
-      <ul id="menu" class="menu"> 
-        <li><a href="#services">บริการ</a></li> 
-        <li><a href="#menus">แพ็กเกจ/เมนู</a></li> 
-        <li><a href="#gallery">แกลเลอรี่</a></li> 
-        <li><a href="#reviews">รีวิว</a></li> 
-        <li><a href="#contact" class="accent">ขอใบเสนอราคา</a></li> 
-        <li><button id="themeToggle" class="ghost" aria-label="สลับโหมด">โหมดกลางคืน</button></li> 
-      </ul> 
-    </nav> 
- 
-    <section class="hero container" role="banner"> 
-      <div class="hero-text"> 
-        <h1>แคทเทอริ่งโทนเขียวขี้ม้า <br>เรียบหรู ดูดีได้ในทุกงาน</h1> 
-        <p>ทีมเชฟมากประสบการณ์ จัดเลี้ยงนอกสถานที่ครบวงจร — อร่อย สะอาด สวยงาม ตรงเวลา</p> 
-        <div class="cta"> 
-          <a class="btn primary" href="#contact">เช็กราคา/เช็ควันว่าง</a> 
-          <a class="btn" href="#menus">ดูแพ็กเกจ</a> 
-        </div> 
-        <ul class="badges"> 
-          <li>วัตถุดิบคัดสรร</li> 
-          <li>ฮาลาล/มังสวิรัติ รองรับ</li> 
-          <li>ออกแบบเมนูเฉพาะงาน</li> 
-        </ul> 
-      </div> 
-      <div class="hero-art" aria-hidden="true"> 
-        <img class="hero-plate" src="assets/hero-plate.svg" alt="" width="520" height="360"> 
-      </div> 
-    </section> 
-  </header> 
- 
-  <main id="main"> 
-    <section id="services" class="section container reveal"> 
-      <h2>บริการของเรา</h2> 
-      <div class="cards"> 
-        <article class="card"> 
-          <h3>บุฟเฟ่ต์ &amp; ค็อกเทล</h3> 
-          <p>จัดไลน์อาหารสวยงาม อุ่นร้อนเสิร์ฟตลอดงาน พร้อมพนักงานบริการ</p> 
-        </article> 
-        <article class="card"> 
-          <h3>ชุดข้าวกล่องพรีเมียม</h3> 
-          <p>แพ็กเกจ Corporate/งานประชุม เลือกเมนูได้ ใส่โลโก้บริษัท</p> 
-        </article> 
-        <article class="card"> 
-          <h3>งานมงคล/งานแต่ง</h3> 
-          <p>ธีมตกแต่งโทนเขียวขี้ม้า เรียบหรู กลมกลืนกับสไตล์งาน</p> 
-        </article> 
-      </div> 
-      <div class="usp grid-3"> 
-        <div class="mini"> 
-          <strong>+100</strong><span>งานต่อปี</span> 
-        </div> 
-        <div class="mini"> 
-          <strong>4.9/5</strong><span>รีวิวลูกค้า</span> 
-        </div> 
-        <div class="mini"> 
-          <strong>48 ชม.</strong><span>ยืนยันใบเสนอราคา</span> 
-        </div> 
-      </div> 
-    </section> 
- 
-    <section id="menus" class="section alt container reveal"> 
-      <h2>แพ็กเกจยอดนิยม</h2> 
-      <div class="pricing"> 
-        <article class="price-card"> 
-          <h3>Standard</h3> 
-          <p class="per">เริ่มต้น <strong>฿350</strong> / ท่าน</p> 
-          <ul> 
-            <li>เมนูหลัก 3 รายการ</li> 
-            <li>ของหวาน 1 รายการ</li> 
-            <li>เครื่องดื่มรีฟิล</li> 
-            <li>อุปกรณ์เสิร์ฟมาตรฐาน</li> 
-          </ul> 
-          <a class="btn outline" href="#contact">ขอเมนูตัวอย่าง</a> 
-        </article> 
-        <article class="price-card featured"> 
-          <div class="ribbon">ยอดนิยม</div> 
-          <h3>Premium</h3> 
-          <p class="per">เริ่มต้น <strong>฿550</strong> / ท่าน</p> 
-          <ul> 
-            <li>เมนูหลัก 5 รายการ</li> 
-            <li>คานาเป้ 2 รายการ</li> 
-            <li>ของหวาน 2 รายการ</li> 
-            <li>ชุดตกแต่งโทนเขียวขี้ม้า</li> 
-          </ul> 
-          <a class="btn primary" href="#contact">เช็คคิว &amp; ราคา</a> 
-        </article> 
-        <article class="price-card"> 
-          <h3>Signature</h3> 
-          <p class="per">คัสตอมเต็มรูปแบบ</p> 
-          <ul> 
-            <li>ดีไซน์เมนูเฉพาะงาน</li> 
-            <li>เชฟ Live Station</li> 
-            <li>ธีมตกแต่งตามแบรนด์</li> 
-            <li>ที่ปรึกษาหน้างาน</li> 
-          </ul> 
-          <a class="btn outline" href="#contact">นัดคุยรายละเอียด</a> 
-        </article> 
-      </div> 
-    </section> 
- 
-    <section id="gallery" class="section container reveal"> 
-      <h2>แกลเลอรี่ผลงาน</h2> 
-      <div class="gallery"> 
-        <figure class="tile"><img src="assets/g1.svg" alt="จัดเลี้ยงโทนเขียวขี้ม้า" loading="lazy"><figcaption>ธีม Olive Classic</figcaption></figure> 
-        <figure class="tile"><img src="assets/g2.svg" alt="คานาเป้พรีเมียม" loading="lazy"><figcaption>คานาเป้พรีเมียม</figcaption></figure> 
-        <figure class="tile"><img src="assets/g3.svg" alt="บุฟเฟ่ต์งานประชุม" loading="lazy"><figcaption>บุฟเฟ่ต์ประชุม</figcaption></figure> 
-      </div> 
-    </section> 
- 
-    <section id="reviews" class="section alt container reveal"> 
-      <h2>เสียงจากลูกค้า</h2> 
-      <div class="reviews"> 
-        <blockquote>“อาหารอร่อยจัดเต็ม ตรงเวลา ทีมงานสุภาพมืออาชีพ” <cite>— คุณนัท, งานแต่ง</cite></blockquote> 
-        <blockquote>“ดีลง่าย ให้คำแนะนำเรื่องเมนูครบ ทำให้งานไหลลื่นมาก” <cite>— คุณพลอย, งานบริษัท</cite></blockquote> 
-      </div> 
-    </section> 
- 
-    <section id="contact" class="section container reveal"> 
-      <h2>ขอใบเสนอราคา</h2> 
-      <p>กรอกแบบฟอร์มนี้ ระบุวันที่ จำนวนแขก และประเภทงาน เราจะติดต่อกลับอย่างรวดเร็ว</p> 
-      <form name="quote" class="contact" method="POST" data-netlify="true"> 
-        <input type="hidden" name="form-name" value="quote"> 
-        <div class="form-grid"> 
-          <div class="form-row"> 
-            <label for="name">ชื่อผู้ติดต่อ</label> 
-            <input id="name" name="name" autocomplete="name" required> 
-          </div> 
-          <div class="form-row"> 
-            <label for="email">อีเมล</label> 
-            <input id="email" type="email" name="email" autocomplete="email" required> 
-          </div> 
-          <div class="form-row"> 
-            <label for="phone">เบอร์โทร</label> 
-            <input id="phone" name="phone" inputmode="tel" autocomplete="tel"> 
-          </div> 
-          <div class="form-row"> 
-            <label for="event_date">วันที่จัดงาน</label> 
-            <input id="event_date" type="date" name="event_date" required> 
-          </div> 
-          <div class="form-row"> 
-            <label for="guests">จำนวนแขก (โดยประมาณ)</label> 
-            <input id="guests" type="number" name="guests" min="10" step="5" required> 
-          </div> 
-          <div class="form-row"> 
-            <label for="event_type">ประเภทงาน</label> 
-            <select id="event_type" name="event_type"> 
-              <option>งานบริษัท</option> 
-              <option>งานแต่ง</option> 
-              <option>งานเลี้ยงส่วนตัว</option> 
-              <option>อื่น ๆ</option> 
-            </select> 
-          </div> 
-          <div class="form-row form-span"> 
-            <label for="message">รายละเอียดเพิ่มเติม/เมนูที่สนใจ</label> 
-            <textarea id="message" name="message" rows="5"></textarea> 
-          </div> 
-        </div> 
-        <div class="form-actions"> 
-          <button class="btn primary" type="submit">ส่งคำขอ</button> 
-          <a class="btn outline" href="tel:+66800000000">โทรหาเรา</a> 
-          <a class="btn outline" href="#" aria-label="ติดต่อผ่าน LINE">LINE</a> 
-        </div> 
-      </form> 
-    </section> 
-  </main> 
- 
-  <footer class="site-footer"> 
-    <div class="container"> 
-      <p>© <span id="year"></span> Olive Catering • All rights reserved.</p> 
-      <nav aria-label="ลิงก์ส่วนท้าย"> 
-        <a href="#top">กลับขึ้นด้านบน</a> 
-        <a href="#">นโยบายความเป็นส่วนตัว</a> 
-        <a href="#">ข้อกำหนดการให้บริการ</a> 
-      </nav> 
-    </div> 
-  </footer> 
-</body> 
-</html> 
-""" 
- 
-styles_css = """/* Base */ 
-*{box-sizing:border-box}html{scroll-behavior:smooth} 
-body{margin:0;font:16px/1.65 'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;color:var(--text);background:var(--bg)} 
-:root{ 
-  /* Olive elegant palette */ 
-  --olive:#505a38; /* เขียวขี้ม้า (หลัก) */ 
-  --olive-600:#40482e; 
-  --olive-200:#a3ad8a; 
-  --bg:#fbfbfa; 
-  --text:#101418; 
-  --muted:#5b6570; 
-  --card:#ffffff; 
-  --alt:#f3f5f1; 
-  --border:#e8ebe4; 
-  --accent:#7a845a; 
-} 
-/* Dark */ 
-:root.dark{ 
-  --bg:#0f1110; --text:#e8ebe4; --muted:#a8b09c; --card:#141714; --alt:#0f110f; --border:#242824; --acc
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Catering - บริการจัดเลี้ยงครบวงจร</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f4f4f4" width="1200" height="600"/><g fill="%23ddd"><circle cx="200" cy="150" r="80"/><circle cx="600" cy="300" r="120"/><circle cx="1000" cy="200" r="90"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Menu Section */
+        .menu {
+            padding: 100px 0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .menu-image {
+            height: 200px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .menu-content {
+            padding: 25px;
+        }
+
+        .menu-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🍽️ Royal Catering</div>
+            <ul class="nav-links">
+                <li><a href="#home">หน้าแรก</a></li>
+                <li><a href="#services">บริการ</a></li>
+                <li><a href="#menu">เมนู</a></li>
+                <li><a href="#contact">ติดต่อ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>บริการเคเทอริ่งระดับพรีเมี่ยม</h1>
+                <p>จัดเลี้ยงทุกโอกาสพิเศษด้วยอาหารคุณภาพสูงและการบริการที่เป็นเลิศ</p>
+                <a href="#contact" class="btn">สอบถามราคา</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">บริการของเรา</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🎉</div>
+                    <h3>งานเลี้ยงส่วนตัว</h3>
+                    <p>จัดเลี้ยงงานส่วนตัว งานวันเกิด งานครอบครัว ด้วยเมนูอาหารหลากหลายรสชาติ</p>
+                </div>
+                <div class="service-card">

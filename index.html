@@ -1,0 +1,251 @@
+# Generate a tailored catering website (Thai) with an olive-green elegant theme. 
+# Package into a ZIP for download. 
+ 
+import os, zipfile, textwrap, json 
+ 
+project_dir = "/mnt/data/catering_th_olive" 
+assets_dir = os.path.join(project_dir, "assets") 
+os.makedirs(assets_dir, exist_ok=True) 
+ 
+index_html = """<!doctype html> 
+<html lang="th"> 
+<head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <title>แคทเทอริ่งจัดเลี้ยงนอกสถานที่ — Olive Catering</title> 
+  <meta name="description" content="บริการแคทเทอริ่ง จัดเลี้ยงนอกสถานที่ เมนูคุณภาพ วัตถุดิบคัดสรร จัดเซ็ตหรู ดูดี เหมาะสำหรับงานแต่ง งานประชุม งานอีเวนต์ และงานสำคัญของคุณ"> 
+  <meta name="theme-color" content="#505a38"> 
+  <meta name="color-scheme" content="light dark"> 
+  <link rel="icon" href="assets/favicon.svg"> 
+  <link rel="preload" href="styles.css" as="style"> 
+  <link rel="stylesheet" href="styles.css"> 
+  <script defer src="script.js"></script> 
+  <script type="application/ld+json"> 
+  { 
+    "@context": "https://schema.org", 
+    "@type": "FoodEstablishment", 
+    "@id": "https://example.com/#catering", 
+    "name": "Olive Catering", 
+    "servesCuisine": ["Thai", "International", "Fusion"], 
+    "priceRange": "$$", 
+    "telephone": "+66-80-000-0000", 
+    "email": "contact@olivecatering.example", 
+    "url": "https://example.com", 
+    "image": "https://example.com/og.jpg", 
+    "address": { 
+      "@type": "PostalAddress", 
+      "addressCountry": "TH" 
+    }, 
+    "areaServed": "Bangkok and nearby provinces", 
+    "sameAs": ["https://www.facebook.com/","https://www.instagram.com/"] 
+  } 
+  </script> 
+</head> 
+<body> 
+  <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a> 
+  <header class="site-header" id="top"> 
+    <nav class="nav container" aria-label="เมนูหลัก"> 
+      <a class="brand" href="#top" aria-label="หน้าแรก"> 
+        <img src="assets/logo.svg" alt="Olive Catering โลโก้" width="28" height="28"> 
+        <span>Olive Catering</span> 
+      </a> 
+      <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="เปิดเมนู">เมนู</button> 
+      <ul id="menu" class="menu"> 
+        <li><a href="#services">บริการ</a></li> 
+        <li><a href="#menus">แพ็กเกจ/เมนู</a></li> 
+        <li><a href="#gallery">แกลเลอรี่</a></li> 
+        <li><a href="#reviews">รีวิว</a></li> 
+        <li><a href="#contact" class="accent">ขอใบเสนอราคา</a></li> 
+        <li><button id="themeToggle" class="ghost" aria-label="สลับโหมด">โหมดกลางคืน</button></li> 
+      </ul> 
+    </nav> 
+ 
+    <section class="hero container" role="banner"> 
+      <div class="hero-text"> 
+        <h1>แคทเทอริ่งโทนเขียวขี้ม้า <br>เรียบหรู ดูดีได้ในทุกงาน</h1> 
+        <p>ทีมเชฟมากประสบการณ์ จัดเลี้ยงนอกสถานที่ครบวงจร — อร่อย สะอาด สวยงาม ตรงเวลา</p> 
+        <div class="cta"> 
+          <a class="btn primary" href="#contact">เช็กราคา/เช็ควันว่าง</a> 
+          <a class="btn" href="#menus">ดูแพ็กเกจ</a> 
+        </div> 
+        <ul class="badges"> 
+          <li>วัตถุดิบคัดสรร</li> 
+          <li>ฮาลาล/มังสวิรัติ รองรับ</li> 
+          <li>ออกแบบเมนูเฉพาะงาน</li> 
+        </ul> 
+      </div> 
+      <div class="hero-art" aria-hidden="true"> 
+        <img class="hero-plate" src="assets/hero-plate.svg" alt="" width="520" height="360"> 
+      </div> 
+    </section> 
+  </header> 
+ 
+  <main id="main"> 
+    <section id="services" class="section container reveal"> 
+      <h2>บริการของเรา</h2> 
+      <div class="cards"> 
+        <article class="card"> 
+          <h3>บุฟเฟ่ต์ &amp; ค็อกเทล</h3> 
+          <p>จัดไลน์อาหารสวยงาม อุ่นร้อนเสิร์ฟตลอดงาน พร้อมพนักงานบริการ</p> 
+        </article> 
+        <article class="card"> 
+          <h3>ชุดข้าวกล่องพรีเมียม</h3> 
+          <p>แพ็กเกจ Corporate/งานประชุม เลือกเมนูได้ ใส่โลโก้บริษัท</p> 
+        </article> 
+        <article class="card"> 
+          <h3>งานมงคล/งานแต่ง</h3> 
+          <p>ธีมตกแต่งโทนเขียวขี้ม้า เรียบหรู กลมกลืนกับสไตล์งาน</p> 
+        </article> 
+      </div> 
+      <div class="usp grid-3"> 
+        <div class="mini"> 
+          <strong>+100</strong><span>งานต่อปี</span> 
+        </div> 
+        <div class="mini"> 
+          <strong>4.9/5</strong><span>รีวิวลูกค้า</span> 
+        </div> 
+        <div class="mini"> 
+          <strong>48 ชม.</strong><span>ยืนยันใบเสนอราคา</span> 
+        </div> 
+      </div> 
+    </section> 
+ 
+    <section id="menus" class="section alt container reveal"> 
+      <h2>แพ็กเกจยอดนิยม</h2> 
+      <div class="pricing"> 
+        <article class="price-card"> 
+          <h3>Standard</h3> 
+          <p class="per">เริ่มต้น <strong>฿350</strong> / ท่าน</p> 
+          <ul> 
+            <li>เมนูหลัก 3 รายการ</li> 
+            <li>ของหวาน 1 รายการ</li> 
+            <li>เครื่องดื่มรีฟิล</li> 
+            <li>อุปกรณ์เสิร์ฟมาตรฐาน</li> 
+          </ul> 
+          <a class="btn outline" href="#contact">ขอเมนูตัวอย่าง</a> 
+        </article> 
+        <article class="price-card featured"> 
+          <div class="ribbon">ยอดนิยม</div> 
+          <h3>Premium</h3> 
+          <p class="per">เริ่มต้น <strong>฿550</strong> / ท่าน</p> 
+          <ul> 
+            <li>เมนูหลัก 5 รายการ</li> 
+            <li>คานาเป้ 2 รายการ</li> 
+            <li>ของหวาน 2 รายการ</li> 
+            <li>ชุดตกแต่งโทนเขียวขี้ม้า</li> 
+          </ul> 
+          <a class="btn primary" href="#contact">เช็คคิว &amp; ราคา</a> 
+        </article> 
+        <article class="price-card"> 
+          <h3>Signature</h3> 
+          <p class="per">คัสตอมเต็มรูปแบบ</p> 
+          <ul> 
+            <li>ดีไซน์เมนูเฉพาะงาน</li> 
+            <li>เชฟ Live Station</li> 
+            <li>ธีมตกแต่งตามแบรนด์</li> 
+            <li>ที่ปรึกษาหน้างาน</li> 
+          </ul> 
+          <a class="btn outline" href="#contact">นัดคุยรายละเอียด</a> 
+        </article> 
+      </div> 
+    </section> 
+ 
+    <section id="gallery" class="section container reveal"> 
+      <h2>แกลเลอรี่ผลงาน</h2> 
+      <div class="gallery"> 
+        <figure class="tile"><img src="assets/g1.svg" alt="จัดเลี้ยงโทนเขียวขี้ม้า" loading="lazy"><figcaption>ธีม Olive Classic</figcaption></figure> 
+        <figure class="tile"><img src="assets/g2.svg" alt="คานาเป้พรีเมียม" loading="lazy"><figcaption>คานาเป้พรีเมียม</figcaption></figure> 
+        <figure class="tile"><img src="assets/g3.svg" alt="บุฟเฟ่ต์งานประชุม" loading="lazy"><figcaption>บุฟเฟ่ต์ประชุม</figcaption></figure> 
+      </div> 
+    </section> 
+ 
+    <section id="reviews" class="section alt container reveal"> 
+      <h2>เสียงจากลูกค้า</h2> 
+      <div class="reviews"> 
+        <blockquote>“อาหารอร่อยจัดเต็ม ตรงเวลา ทีมงานสุภาพมืออาชีพ” <cite>— คุณนัท, งานแต่ง</cite></blockquote> 
+        <blockquote>“ดีลง่าย ให้คำแนะนำเรื่องเมนูครบ ทำให้งานไหลลื่นมาก” <cite>— คุณพลอย, งานบริษัท</cite></blockquote> 
+      </div> 
+    </section> 
+ 
+    <section id="contact" class="section container reveal"> 
+      <h2>ขอใบเสนอราคา</h2> 
+      <p>กรอกแบบฟอร์มนี้ ระบุวันที่ จำนวนแขก และประเภทงาน เราจะติดต่อกลับอย่างรวดเร็ว</p> 
+      <form name="quote" class="contact" method="POST" data-netlify="true"> 
+        <input type="hidden" name="form-name" value="quote"> 
+        <div class="form-grid"> 
+          <div class="form-row"> 
+            <label for="name">ชื่อผู้ติดต่อ</label> 
+            <input id="name" name="name" autocomplete="name" required> 
+          </div> 
+          <div class="form-row"> 
+            <label for="email">อีเมล</label> 
+            <input id="email" type="email" name="email" autocomplete="email" required> 
+          </div> 
+          <div class="form-row"> 
+            <label for="phone">เบอร์โทร</label> 
+            <input id="phone" name="phone" inputmode="tel" autocomplete="tel"> 
+          </div> 
+          <div class="form-row"> 
+            <label for="event_date">วันที่จัดงาน</label> 
+            <input id="event_date" type="date" name="event_date" required> 
+          </div> 
+          <div class="form-row"> 
+            <label for="guests">จำนวนแขก (โดยประมาณ)</label> 
+            <input id="guests" type="number" name="guests" min="10" step="5" required> 
+          </div> 
+          <div class="form-row"> 
+            <label for="event_type">ประเภทงาน</label> 
+            <select id="event_type" name="event_type"> 
+              <option>งานบริษัท</option> 
+              <option>งานแต่ง</option> 
+              <option>งานเลี้ยงส่วนตัว</option> 
+              <option>อื่น ๆ</option> 
+            </select> 
+          </div> 
+          <div class="form-row form-span"> 
+            <label for="message">รายละเอียดเพิ่มเติม/เมนูที่สนใจ</label> 
+            <textarea id="message" name="message" rows="5"></textarea> 
+          </div> 
+        </div> 
+        <div class="form-actions"> 
+          <button class="btn primary" type="submit">ส่งคำขอ</button> 
+          <a class="btn outline" href="tel:+66800000000">โทรหาเรา</a> 
+          <a class="btn outline" href="#" aria-label="ติดต่อผ่าน LINE">LINE</a> 
+        </div> 
+      </form> 
+    </section> 
+  </main> 
+ 
+  <footer class="site-footer"> 
+    <div class="container"> 
+      <p>© <span id="year"></span> Olive Catering • All rights reserved.</p> 
+      <nav aria-label="ลิงก์ส่วนท้าย"> 
+        <a href="#top">กลับขึ้นด้านบน</a> 
+        <a href="#">นโยบายความเป็นส่วนตัว</a> 
+        <a href="#">ข้อกำหนดการให้บริการ</a> 
+      </nav> 
+    </div> 
+  </footer> 
+</body> 
+</html> 
+""" 
+ 
+styles_css = """/* Base */ 
+*{box-sizing:border-box}html{scroll-behavior:smooth} 
+body{margin:0;font:16px/1.65 'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;color:var(--text);background:var(--bg)} 
+:root{ 
+  /* Olive elegant palette */ 
+  --olive:#505a38; /* เขียวขี้ม้า (หลัก) */ 
+  --olive-600:#40482e; 
+  --olive-200:#a3ad8a; 
+  --bg:#fbfbfa; 
+  --text:#101418; 
+  --muted:#5b6570; 
+  --card:#ffffff; 
+  --alt:#f3f5f1; 
+  --border:#e8ebe4; 
+  --accent:#7a845a; 
+} 
+/* Dark */ 
+:root.dark{ 
+  --bg:#0f1110; --text:#e8ebe4; --muted:#a8b09c; --card:#141714; --alt:#0f110f; --border:#242824; --acc

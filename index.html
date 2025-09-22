@@ -86,13 +86,13 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 30%, #e74c3c 100%);
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: #2c3e50;
+            color: white;
             position: relative;
             overflow: hidden;
         }
@@ -104,40 +104,45 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="dots" patternUnits="userSpaceOnUse" width="40" height="40"><circle cx="20" cy="20" r="1" fill="%23adb5bd" opacity="0.3"/></pattern></defs><rect width="1200" height="800" fill="url(%23dots)"/></svg>') repeat;
-            opacity: 0.5;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="food-pattern" patternUnits="userSpaceOnUse" width="80" height="80"><circle cx="20" cy="20" r="3" fill="%23ffffff" opacity="0.1"/><circle cx="60" cy="60" r="2" fill="%23ffffff" opacity="0.15"/><rect x="35" y="35" width="10" height="10" rx="2" fill="%23ffffff" opacity="0.1"/><circle cx="40" cy="65" r="1.5" fill="%23ffffff" opacity="0.2"/></pattern></defs><rect width="1200" height="800" fill="url(%23food-pattern)"/></svg>') repeat;
+            opacity: 0.3;
         }
 
         .hero-content h1 {
             font-size: 3.5rem;
             margin-bottom: 1rem;
             animation: slideInUp 1s ease;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .hero-content p {
             font-size: 1.3rem;
             margin-bottom: 2rem;
             animation: slideInUp 1s ease 0.3s both;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .btn {
             display: inline-block;
             padding: 15px 40px;
-            background: #2c3e50;
-            color: white;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
             text-decoration: none;
             border-radius: 30px;
-            font-weight: 300;
+            font-weight: 400;
             letter-spacing: 1px;
             transition: all 0.3s ease;
             animation: slideInUp 1s ease 0.6s both;
-            box-shadow: 0 5px 25px rgba(44, 62, 80, 0.3);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 35px rgba(44, 62, 80, 0.4);
-            background: #34495e;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
         }
 
         /* Services Section */
@@ -230,20 +235,43 @@
             border: 1px solid #e9ecef;
         }
 
+        .gallery-item-1 {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://i.ibb.co/LDPh5NFS/S-45867069-0.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
         .gallery-item-1::before {
-            content: '🥪';
-            position: absolute;
-            top: 30px;
-            font-size: 2.5rem;
-            opacity: 0.3;
+            content: '';
+        }
+
+        .gallery-item-1::after {
+            content: '';
+        }
+
+        .gallery-item-2 {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #6c5ce7 100%);
+            position: relative;
         }
 
         .gallery-item-2::before {
             content: '🍱';
             position: absolute;
-            top: 30px;
-            font-size: 2.5rem;
+            top: 20px;
+            font-size: 3rem;
             opacity: 0.3;
+        }
+
+        .gallery-item-2::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><rect x="10" y="10" width="8" height="8" rx="1" fill="%23ffffff" opacity="0.15"/><rect x="40" y="40" width="6" height="6" rx="1" fill="%23ffffff" opacity="0.2"/><rect x="20" y="35" width="4" height="4" rx="1" fill="%23ffffff" opacity="0.18"/></svg>') repeat;
         }
 
         .gallery-item-3::before {
@@ -494,8 +522,8 @@
         <div class="container">
             <h2 class="section-title">ผลงานของเรา</h2>
             <div class="gallery-grid">
-                <div class="gallery-item gallery-item-1">🥪 เซ็ตอาหารว่าง</div>
-                <div class="gallery-item gallery-item-2">🍱 เซ็ตข้าวกล่อง</div>
+                <div class="gallery-item gallery-item-1" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">🥪 เซ็ตอาหารว่าง</div>
+                <div class="gallery-item gallery-item-2" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">🍱 เซ็ตข้าวกล่อง</div>
                 <div class="gallery-item gallery-item-3">🍽️ บุฟเฟ่ต์</div>
                 <div class="gallery-item gallery-item-4">🙏 เซ็ทอาหารถวายพระ</div>
                 <div class="gallery-item gallery-item-5">🥗 ซุ้มส้มตำ</div>
